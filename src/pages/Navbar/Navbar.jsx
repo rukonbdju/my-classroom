@@ -12,10 +12,10 @@ const Navbar = () => {
             MyClassroom
           </h1>
           <div className="flex flex-row items-center gap-2">
-            <Link to={'/classroom'} className='bold hover:text-blue-700'>Classroom</Link>
-            <Link to={'/createClassroom'} className='bold hover:text-blue-700'>Create</Link>
-            <Link to={'/joinClassroom'} className='bold hover:text-blue-700'>Join</Link>
-            <h2 className="text-2xl">{user?.displayName}</h2>
+            <Link to={'/'} className='font-bold hover:underline text-blue-700'>Home</Link>
+            <Link to={'/createClassroom'} className='font-bold hover:underline text-blue-700'>Create</Link>
+            <Link to={'/joinClassroom'} className='font-bold hover:underline text-blue-700'>Join</Link>
+            
             <div>
                 {user?.uid && (
                   <button
@@ -27,10 +27,13 @@ const Navbar = () => {
                   </button>
                 )}
               </div>
-            <div className="flex flex-row items-center justify-center bg-blue-700 text-white rounded-full border-2 w-12 h-12">
+            <div className="flex relative flex-row items-center justify-center bg-blue-700 text-white rounded-full border-2 w-12 h-12">
               <span className="text-xl font-bold">
                 {user?.displayName?.slice(0, 1)}
               </span>
+{/*               <div className='absolute right-0 bottom-0 p-4 rounded'>
+              <h2 className="text-2xl">{user?.displayName}</h2>
+              </div> */}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider";
 const Registration = () => {
@@ -76,6 +76,22 @@ const Registration = () => {
   console.log(loading);
   console.log(user);
 
+  useEffect(()=>{
+    const saveUserToDatabase=async(userInfo)=>{
+      try{
+        const response = await fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
+        });
+        const result = await response.json();
+        console.log(result);
+      }catch{err=>console.log(err)}
+    }
+  },[user])
+
   const handleCreateUser = async (event) => {
     event.preventDefault();
     const name = event.target.name.value;
@@ -83,18 +99,9 @@ const Registration = () => {
     const address = event.target.address.value;
     const district = event.target.district.value;
     const email = event.target.email.value;
-    const userInput = { name, school, address, district, email};
+    const formData={name,school,address,district,email}
     try {
-      await createNewUserWithEmail(email, password, name);
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userInput),
-      });
-      const result = await response.json();
-      console.log(result)
+      await createNewUserWithEmail(email, password, name,formData)     
     } catch {
       (err) => console.error(err);
     }

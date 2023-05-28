@@ -7,6 +7,7 @@ import JoinClassroom from "./pages/JoinClassroom/JoinClassroom";
 import CreateClassroom from "./pages/CreateClassroom/CreateClassroom";
 import Home from "./pages/home/Home";
 import MainLayout from "./pages/layouts/MainLayout";
+import MainRoute from "./pages/routes/MainRoute";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         </Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/register" element={<Register/>}></Route>
-        <Route path="/classroom" element={<MainLayout></MainLayout>}></Route>
+        <Route path="/classroom/:id" element={<MainRoute><MainLayout></MainLayout></MainRoute>}></Route>
       </Routes>
     </>
   );

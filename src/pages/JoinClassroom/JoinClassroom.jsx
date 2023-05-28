@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider";
 
 const JoinClassroom = () => {
+  const navigate=useNavigate()
   const authInfo=useContext(AuthContext)
   const{user}=authInfo;
   const [classrooms, setClassrooms] = useState([]);
@@ -26,7 +27,6 @@ const JoinClassroom = () => {
 
   const handleClassroomId = (e) => {
     const classroomID = e.target.value;
-    console.log(classroomID)
     setClassroomId(classroomID);
     const selectedClassroomId = classrooms.find(
       (classroom) => classroomID === classroom._id
@@ -38,8 +38,7 @@ const JoinClassroom = () => {
     e.preventDefault();
     try {
       const data={id:classroomId}
-      console.log(user.email)
-      const res=await fetch(`http://localhost:3000/users/${user.email}`,{
+      const res=await fetch(`http://localhost:3000/users/${user.uid}`,{
         method:"PUT",
         headers:{
           "Content-Type":"application/json",
@@ -47,18 +46,25 @@ const JoinClassroom = () => {
         body:JSON.stringify(data)
       })
       const result=await res.json();
+      console.log(result)
       if(result.acknowledged){
-        const email={email:user.email};
+        const uid=user.uid;
+        const name=user.displayName;
+        const email=user.email;
+        const userInfo={uid,name,email}
+        console.log(userInfo)
         const res=await fetch(`http://localhost:3000/classrooms/${classroomId}`,{
         method:"PUT",
         headers:{
           "Content-Type":"application/json",
         },
-        body:JSON.stringify(email)
+        body:JSON.stringify(userInfo)
       })
-      const updateRes=res.json()
+      const updateRes=await res.json()
+      console.log(updateRes)
         e.target.reset();
         setIsJoined(true)
+        navigate('/')
       }
     } catch {
       (error) => console.log(error);

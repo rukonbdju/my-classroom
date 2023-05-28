@@ -6,7 +6,7 @@ const CreateClassroom = () => {
   const navigate = useNavigate();
   const userInfo = useContext(AuthContext);
   const { user } = userInfo;
-  const [classroomCreationResult, setClassroomCreationResult] = useState({});
+  const [createClass, setCreateClass] = useState({});
   const [loading, setLoading] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const classes = [
@@ -31,11 +31,13 @@ const CreateClassroom = () => {
   ];
   const handleClassroomData = async (e) => {
     e.preventDefault();
-    const classroomName = e.target.classroomName.value;
-    const school = e.target.school.value;
-    const className = e.target.className.value;
-    const userEmail = user.email;
-    const classroomData = { classroomName, school, className, userEmail };
+    const name = e.target.name.value;
+    const institute = e.target.institute.value;
+    const _class = e.target.class.value;
+    const email = user.email;
+    const creator = user.displayName;
+    const uid = user.uid;
+    const formData = { name, institute, _class, email, uid, creator };
     try {
       setLoading(true);
       const response = await fetch("http://localhost:3000/classrooms", {
@@ -43,24 +45,10 @@ const CreateClassroom = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(classroomData),
+        body: JSON.stringify(formData),
       });
       const result = await response.json();
-      if (result.acknowledged) {
-        console.log(result);
-        setClassroomCreationResult(result);
-        const data = { option: "create", id: result.insertedId };
-        const res = await fetch(`http://localhost:3000/users/${user.email}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-        const result1 = await res.json();
-        e.target.reset();
-        console.log(result1);
-      }
+      setCreateClass(result);
       setModalActive(true);
       setLoading(false);
     } catch {
@@ -70,7 +58,7 @@ const CreateClassroom = () => {
 
   const handleCloseModal = () => {
     setModalActive(false);
-    navigate("/classroom");
+    navigate("/");
   };
   return (
     <div className="max-w-xl  mx-auto pt-28 rounded-lg bg-slate-100">
@@ -83,21 +71,21 @@ const CreateClassroom = () => {
           className="p-2 border-2 rounded-lg w-full"
           placeholder="Enter classroom name"
           type="text"
-          name="classroomName"
+          name="name"
           id="name"
         />
         <input
           className="p-2 border-2 rounded-lg w-full"
           placeholder="Enter school/college/university"
           type="text"
-          name="school"
+          name="institute"
           id="school"
         />
         <select
           required
           className="border-2 rounded-lg p-2 w-full"
-          name="className"
-          id="className"
+          name="class"
+          id="class"
         >
           <option value="">Select an class</option>
           {classes.map((cls) => (
@@ -135,8 +123,21 @@ const CreateClassroom = () => {
               <h1 className="text-2xl">
                 Your classroom is Successfully created!
               </h1>
-              <p>Your classroom ID is {classroomCreationResult.insertedId}</p>
-              <p>Your classroom code is {classroomCreationResult.classCode}</p>
+              <div className="my-2">
+                <p>
+                  Your classroom ID is{" "}
+                  <span className="text-blue-500 underline">
+                    {createClass.insertedId}
+                  </span>{" "}
+                </p>
+                <p>
+                  Your classroom code is{" "}
+                  <span className="text-blue-500 underline">
+                    {createClass.classCode}
+                  </span>{" "}
+                </p>
+              </div>
+              <p className="bg-slate-400 p-2 rounded-md">Share with your students</p>
             </div>
           </div>
         </div>
