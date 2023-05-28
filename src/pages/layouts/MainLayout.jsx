@@ -8,14 +8,14 @@ import { useParams } from "react-router-dom";
 import Student from "../classroom/Student";
 import Post from "../classroom/Post";
 const MainLayout = () => {
-  const {id}=useParams()
+  const { id } = useParams();
   const { user, loading } = useContext(AuthContext);
   const [createdClassrooms, setCreatedClassrooms] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [modal, setModal] = useState(false);
-  const [currentClassroom,setCurrentClassroom]=useState({})
-  const [posts,setPosts]=useState([])
-  console.log(posts)
+  const [currentClassroom, setCurrentClassroom] = useState({});
+  const [posts, setPosts] = useState([]);
+  console.log(posts);
   //fetching function
   const getCreatedClassroom = async (url) => {
     try {
@@ -36,8 +36,7 @@ const MainLayout = () => {
     }
   };
 
-  
-  const getCurrentClassroom=async(url)=>{
+  const getCurrentClassroom = async (url) => {
     try {
       const response = await fetch(url);
       const result = await response.json();
@@ -45,9 +44,9 @@ const MainLayout = () => {
     } catch {
       (error) => console.log(error);
     }
-  }
+  };
 
-  const getPosts=async(url)=>{
+  const getPosts = async (url) => {
     try {
       const response = await fetch(url);
       const result = await response.json();
@@ -55,30 +54,34 @@ const MainLayout = () => {
     } catch {
       (error) => console.log(error);
     }
-  }
+  };
   useEffect(() => {
     if (user.uid) {
       const classroomUrl = `http://localhost:3000/classrooms/${user.uid}`;
       const currentClassroomUrl = `http://localhost:3000/classrooms/${id}`;
       const userUrl = `http://localhost:3000/users/${user.uid}`;
-      const postsUrl='http://localhost:3000/posts'
+      const postsUrl = "http://localhost:3000/posts";
       getCreatedClassroom(classroomUrl);
       getCurrentUser(userUrl);
       getCurrentClassroom(currentClassroomUrl);
-      getPosts(postsUrl)
+      getPosts(postsUrl);
     }
-  }, [user,id]);
+  }, [user, id]);
   return (
     <div className="bg-slate-100">
       <Navbar></Navbar>
       {modal && (
         <div className="absolute h-screen w-screen mx-auto flex items-center justify-center bg-slate-500 bg-opacity-50 z-50">
-          <PostModal id={currentClassroom._id} setPosts={setPosts} setModal={setModal}></PostModal>
+          <PostModal
+            id={currentClassroom._id}
+            setPosts={setPosts}
+            setModal={setModal}
+          ></PostModal>
         </div>
       )}
-      <div className="flex justify-between relative">
-        <aside className="pt-16 sticky top-0 w-80 h-screen  bg-slate-200">
-          <div className="h-full p-6 overflow-y-auto">
+      <div className="relative">
+        <aside className="hidden md:hidden lg:block pt-16 fixed left-0 top-0 w-72 h-screen bg-slate-200">
+          <div className="h-full p-4 overflow-y-auto">
             <div>
               <h1 className="text-xl font-bold">Created Class</h1>
               {createdClassrooms?.map((classroom) => (
@@ -100,14 +103,13 @@ const MainLayout = () => {
             </div>
           </div>
         </aside>
-        <main className="pt-16 w-1/2 bg-slate-100">
+        <main className="pt-16 w-11/12 md:w-2/3 lg:w-2/5 mx-auto bg-slate-100">
           <div className="bg-blue-300 mt-4 rounded-lg">
             <div className="p-4">
               <h1 className="text-4xl font-bold">{currentClassroom.name}</h1>
               <p className="mb-6 uppercase">{currentClassroom._class}</p>
               <p className="font-bold">{currentClassroom.creator}</p>
               <p className="font-bold">{currentClassroom.institute}</p>
-
             </div>
           </div>
           <div className="p-6 flex gap-2  justify-center">
@@ -126,19 +128,35 @@ const MainLayout = () => {
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            {
-              posts?.map((post)=><Post key={post._id} post={post}></Post>)
-            }
+            {posts?.map((post) => (
+              <Post key={post._id} post={post}></Post>
+            ))}
           </div>
         </main>
-        <aside className="pt-16 sticky top-0 w-80 h-screen  bg-slate-200">
-          <div className="h-full p-6 overflow-y-auto">
+
+        <aside className="hidden lg:block pt-16 fixed top-0 right-0 w-64 h-screen  bg-slate-200">
+          <div className="h-full p-6 overflow-y-auto sticky top-0">
             <h1 className="text-xl font-bold">Students</h1>
             <div className="my-6">
-              {currentClassroom?.students?.map((student)=><Student key={student.uid} student={student}></Student>)}
+              {currentClassroom?.students?.map((student) => (
+                <Student key={student.uid} student={student}></Student>
+              ))}
             </div>
           </div>
         </aside>
+        <footer className="h-12 bg-slate-200 fixed bottom-0 w-screen">
+          <div className="flex flex-row justify-between items-center w-3/4 mx-auto">
+            <div className="p-4 hover:bg-slate-400">
+              <span class="material-symbols-outlined">group</span>
+            </div>
+            <div className="p-4 hover:bg-slate-400">
+              <span class="material-symbols-outlined">school</span>
+            </div>
+            <div className="p-4 hover:bg-slate-400">
+              <span class="material-symbols-outlined">library_books</span>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

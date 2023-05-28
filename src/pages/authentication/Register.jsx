@@ -125,11 +125,11 @@ const Registration = () => {
 
   return (
     <div className="mx-auto p-4 rounded-lg bg-slate-100">
-      <h1 className="text-5xl text-center font-bold my-10">
+      <h1 className="text-2xl md:text-3xl lg:text-5xl text-center font-bold mt-10">
         Welcome To Classroom!
       </h1>
       <section className="max-w-xl mx-auto">
-        <h3 className="text-2xl text-center mb-5">Registration now</h3>
+        <h3 className="text-2xl text-center my-5">Registration now</h3>
         <form
           onSubmit={handleCreateUser}
           className="max-w-xl mx-auto flex flex-col gap-5"

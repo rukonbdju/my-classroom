@@ -16,9 +16,10 @@ const Login = () => {
     }
   };
   return (
-    <div className="w-screen mx-auto rounded-lg bg-slate-100">
+    <div className=" bg-slate-100">
+      <div className="w-5/6 mx-auto">
       <form onSubmit={handleLogin} className="h-screen flex flex-col items-center justify-center max-w-lg mx-auto gap-4">
-        <h1 className="text-5xl mb-12">Welcome Back!</h1>
+        <h1 className="text-2xl md:text-4xl lg:text-5xl mb-12 font bold">Welcome Back!</h1>
         <input
           className="w-full p-2 border-2 rounded-lg"
           placeholder="Enter Email"
@@ -36,7 +37,7 @@ const Login = () => {
         <button
         type="submit"
           className="w-full font-bold rounded-lg shadow-xl
-             bg-gradient-to-r from-violet-500 to-fuchsia-500 text-slate-100 px-4 uppercase py-3"
+             bg-gradient-to-r from-violet-500 to-fuchsia-500 text-slate-100 px-4 uppercase py-2 md:py-3 lg:py-3"
         >
           Login
         </button>
@@ -52,6 +53,7 @@ const Login = () => {
           </p>
         </div>
       </form>
+      </div>
     </div>
   );
 };
